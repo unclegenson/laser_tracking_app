@@ -21,8 +21,10 @@ class JamApp(App):
 if __name__ == "__main__":
     JamApp().run()
 
-
-
+# todo: change icon 
+# todo: add download pdf to Jam features button
+# todo: start the image prossecing 
+    
 # import mimetypes
 # import os
 # import os.path
