@@ -28,7 +28,8 @@ while(True):
     # Second blur to reduce more noise, easier circle detection
     captured_frame_lab_red = cv2.GaussianBlur(captured_frame_lab_red, (5, 5), 2, 2)
     # Use the Hough transform to detect circles in the image
-    circles = cv2.HoughCircles(captured_frame_lab_red, cv2.HOUGH_GRADIENT, 1, captured_frame_lab_red.shape[0] / 8, param1=100, param2=18, minRadius=5, maxRadius=60)
+    circles = cv2.HoughCircles(captured_frame_lab_red, cv2.HOUGH_GRADIENT, 1, captured_frame_lab_red.shape[0] / 8, param1=100,
+                                param2=18, minRadius=2, maxRadius=20)
 
     if circles is not None:
         # x, y, radius
@@ -50,5 +51,5 @@ while(True):
 
 cv2.destroyAllWindows()
 
-plt.scatter(X_axis,Y_axis)
+plt.scatter(X_axis,Y_axis,s = 1)
 plt.show()
