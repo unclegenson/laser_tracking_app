@@ -4,7 +4,7 @@ import cv2
 import requests
 import matplotlib.pyplot as plt
 
-url = "http://192.168.1.102:8080/shot.jpg"
+url = "http://192.168.1.104:8080/shot.jpg"
 
 X_axis = []
 Y_axis = []
@@ -24,7 +24,7 @@ while(True):
     # Threshold the Lab image, keep only the red pixels
     # Possible yellow threshold: [20, 110, 170][255, 140, 215]
     # Possible blue threshold: [20, 115, 70][255, 145, 120]
-    captured_frame_lab_red = cv2.inRange(captured_frame_lab, np.array([20, 150, 150]), np.array([190, 255, 255]))
+    captured_frame_lab_red = cv2.inRange(captured_frame_lab, np.array([30, 150, 150]), np.array([190, 255, 255]))   
     # Second blur to reduce more noise, easier circle detection
     captured_frame_lab_red = cv2.GaussianBlur(captured_frame_lab_red, (5, 5), 2, 2)
     # Use the Hough transform to detect circles in the image
@@ -34,11 +34,12 @@ while(True):
     if circles is not None:
         # x, y, radius
         # x az chap and y az bala 
-        
-        print('X:',circles[0][0][0])
-        print('Y:',circles[0][0][1])
-        X_axis.append(circles[0][0][0])
-        Y_axis.append(circles[0][0][1])
+        x = circles[0][0][0]
+        y = circles[0][0][1]
+        print('X:',x)
+        print('Y:',y)
+        X_axis.append(x)
+        Y_axis.append(y)
 
         circles = np.round(circles[0, :]).astype("int")
         cv2.circle(output_frame, center=(circles[0, 0], circles[0, 1]), radius=circles[0, 2], color=(0, 255, 0), thickness=2)
@@ -53,3 +54,4 @@ cv2.destroyAllWindows()
 
 plt.scatter(X_axis,Y_axis,s = 1)
 plt.show()
+
