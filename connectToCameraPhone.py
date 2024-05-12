@@ -8,7 +8,17 @@ url = "http://192.168.1.103:8080/shot.jpg"
 
 X_axis ,Y_axis= [],[]
 
+def reject_outliers(data, m = 3.):
+    d = np.abs(data - np.median(data))
+    mdev = np.median(d)
+    s = d/mdev if mdev else np.zeros(len(d))
+    return data[s<m]
+
+Y_distances = []
+X_distances = []
+
 while(True):
+
     img_resp = requests.get(url) 
     img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8) 
     captured_frame = cv2.imdecode(img_arr, -1) 
@@ -20,9 +30,6 @@ while(True):
 
     captured_frame_bgr = cv2.medianBlur(captured_frame_bgr, 3)
     captured_frame_lab = cv2.cvtColor(captured_frame_bgr, cv2.COLOR_BGR2Lab)
-    # Threshold the Lab image, keep only the red pixels
-    # Possible yellow threshold: [20, 110, 170][255, 140, 215]
-    # Possible blue threshold: [20, 115, 70][255, 145, 120]
     captured_frame_lab_red = cv2.inRange(captured_frame_lab, np.array([30, 150, 150]), np.array([190, 255, 255])) 
     sensitivity = 15
     lower_white = np.array([0,0,255-sensitivity])
@@ -57,7 +64,45 @@ while(True):
             circles = np.round(circles[0, :]).astype("int")
             cv2.circle(output_frame, center=(circles[0, 0], circles[0, 1]), radius=circles[0, 2], color=(0, 255, 0), thickness=2)
             cv2.putText(output_frame,'laser detected',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
-    
+
+            X_axis = reject_outliers(np.array(X_axis))
+
+            for index in range(len(X_axis)):
+                if index == 0:
+                    pass
+                else:
+                    result = round(X_axis[index] - X_axis[index-1],3)
+                    if result != 0:
+                        X_distances.append(result)
+
+            for x_distance in X_distances:
+                if abs(x_distance) >=  2 * abs(sum(X_distances) / len(X_distances)):
+                    cv2.putText(output_frame,'Paresh X',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)                    
+                    playsound.playsound('something_detected.mp3')
+
+                elif abs(x_distance) <=  abs(sum(X_distances) / len(X_distances)) / 3:
+                    cv2.putText(output_frame,'Mane X',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+                    playsound.playsound('something_detected.mp3')
+
+
+            Y_axis = reject_outliers(np.array(Y_axis))
+
+            for index in range(len(Y_axis)):
+                if index == 0:
+                    pass
+                else:
+                    result = round(Y_axis[index] - Y_axis[index-1],3)
+                    if result != 0:
+                        Y_distances.append(result)
+
+            for y_distance in Y_distances:
+                if abs(y_distance) >=  2 * abs(sum(Y_distances) / len(Y_distances)):
+                    cv2.putText(output_frame,'Paresh Y',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+                    playsound.playsound('something_detected.mp3')
+
+                elif abs(y_distance) <=  abs(sum(Y_distances) / len(Y_distances)) / 3:
+                    cv2.putText(output_frame,'Mane Y',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+                    playsound.playsound('something_detected.mp3')
 
     cv2.imshow('frame', output_frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):

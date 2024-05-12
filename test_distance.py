@@ -1,35 +1,32 @@
 import numpy as np
 
 
-X_axis = [12,12.1,4,12.4,12.7,13,14,19.3,21,24,26,32,39]
-X_distances = []
+X_axis = [12,12.1,12.8,12.2,12.3,12.4,12.6,12.7,45,15]
 
-def reject_outliers(data, m = 2.):
+
+def reject_outliers(data, m = 3.):
     d = np.abs(data - np.median(data))
     mdev = np.median(d)
     s = d/mdev if mdev else np.zeros(len(d))
     return data[s<m]
-
-print(reject_outliers(np.array(X_axis)))
-
-
-def reject_outliers_2(data, m=2.):
-    d = np.abs(data - np.median(data))
-    mdev = np.median(d)
-    s = d / (mdev if mdev else 1.)
-    return data[s < m]
-print(reject_outliers_2(np.array(X_axis)))
+X_distances = []
+X_axis = reject_outliers(np.array(X_axis))
 
 
-for index in range(len(reject_outliers(np.array(X_axis)))):
+for index in range(len(X_axis)):
     if index == 0:
         pass
     else:
-        X_distances.append(round(X_axis[index] - X_axis[index-1],3))
+        result = round(X_axis[index] - X_axis[index-1],3)
+        if result != 0:
+            X_distances.append(result)
 
-print(X_distances)
 
-for d in X_distances:
-    if d >= 2 * sum(X_distances) / len(X_distances):
-        print(d)
+for x_distance in X_distances:
+    print(x_distance)
+    if abs(x_distance) >=  2 * abs(sum(X_distances) / len(X_distances)):
+        print('paresh',x_distance)
+
+    elif abs(x_distance) <=  abs(sum(X_distances) / len(X_distances)) / 3:
+        print('mane',x_distance)
 
