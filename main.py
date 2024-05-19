@@ -1,70 +1,54 @@
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen
+# from kivy.app import App
+# from kivy.lang import Builder
+# from kivy.uix.screenmanager import ScreenManager, Screen
 
-class MainWindow(Screen):
-    pass
+# class MainWindow(Screen):
+#     pass
 
-class SecondWindow(Screen):
-    pass
+# class SecondWindow(Screen):
+#     pass
 
-class WindowManager(ScreenManager):
-    pass
+# class WindowManager(ScreenManager):
+#     pass
 
-kv = Builder.load_file("KivyFile.kv")
+# kv = Builder.load_file("KivyFile.kv")
 
-class JamApp(App):
-    def build(self):
-        self.icon='appIcon.png'
-        return kv
+# class JamApp(App):
+#     def build(self):
+#         self.icon='appIcon.png'
+#         return kv
 
-if __name__ == "__main__":
-    JamApp().run()
+# if __name__ == "__main__":
+#     JamApp().run()
 
-# todo: change icon 
-# todo: add download pdf to Jam features button
-# todo: start the image prossecing 
+# # todo: change icon 
+# # todo: add download pdf to Jam features button
     
-# import mimetypes
-# import os
-# import os.path
-# import mimetypes
-# from urllib.parse import urljoin
 
-# import sys
-# sys.platform = 'msys'
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.camera import Camera
+from kivy.core.window import Window
 
-# import requests
+Window.size = (720,350)
 
-# from jnius import autoclass, cast
+class TestCameraApp(App):
+   def build(self):
+      box=BoxLayout(orientation='vertical')
+      self.mycam=Camera(play=False, resolution= (640, 480))
+      box.add_widget(self.mycam)
+      tb=ToggleButton(text='Play', size_hint_y= None, height= '48dp')
+      tb.bind(on_press=self.play)
+      box.add_widget(tb)
+      return box
 
-# def download_file(self, url):
-#         save_dir = self.user_data_dir
-#         local_filename = url.split('/')[-1]
-#         local_file = os.path.join(save_dir, local_filename)
-#         response = requests.get(url, stream=True)
-#         with open(local_file, 'wb') as f:
-#             for chunk in response.iter_content(chunk_size=1024):
-#                 if chunk:
-#                     f.write(chunk)
-#                     f.flush()
-#         return local_file
-
-#     def open_image(self, button):
-#         # Android stuff
-#         PythonActivity = autoclass('org.renpy.android.PythonActivity')
-#         Intent = autoclass('android.content.Intent')
-#         Uri = autoclass('android.net.Uri')
-
-#         url = "http://www.mountvernon.org/sites/mountvernon.org/files/images/GW_Stuart-CT-6437.jpg"
-#         path = self.download_file(url)
-#         mimetype = mimetypes.guess_type(path)[0]
-#         image_uri = urljoin('file://', path)
-
-#         print("Starting intent...")
-#         intent = Intent()
-#         intent.setAction(Intent.ACTION_VIEW)
-#         intent.setDataAndType(Uri.parse(image_uri), mimetype)
-#         currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
-#         currentActivity.startActivity(intent)
-#         print("Finished intent")  
+   def play(self, instance):
+      if instance.state=='down':
+         self.mycam.play=True
+         instance.text='Stop'
+      else:
+         self.mycam.play=False
+         instance.text='Play'
+         
+TestCameraApp().run()
