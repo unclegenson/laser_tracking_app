@@ -1,15 +1,14 @@
 from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.graphics.texture import *
-import cv2
 import imutils
 import numpy as np
 import cv2
 from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
+from kivy.uix.boxlayout import BoxLayout
 
 def kivy_play_sound(sound):
     SoundLoader.load(sound).play()
@@ -29,7 +28,7 @@ X_axis ,Y_axis= [],[]
 class MainApp(MDApp):
     def build(self):
 
-        layout = MDBoxLayout(orientation='vertical')
+        layout = BoxLayout(orientation='vertical')
         self.image = Image()
 
         self.closeButton = MDRaisedButton(
