@@ -79,12 +79,12 @@ class MainApp(App):
         
         if circles is None:
             # kivy_play_sound('nothing_detected.mp3')
-            cv2.putText(output_frame,'0 laser detected',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+            cv2.putText(output_frame,'0 laser detected',(15,25),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,255)
 
         elif circles is not None:
             if len(circles[0]) > 1:
                 # kivy_play_sound('more_than_one.mp3')
-                cv2.putText(output_frame,'more than 1 laser detected',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+                cv2.putText(output_frame,'more than 1 laser detected',(15,25),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,255)
 
             else:
                 # x, y, radius
@@ -96,7 +96,7 @@ class MainApp(App):
 
                 circles = np.round(circles[0, :]).astype("int")
                 cv2.circle(output_frame, center=(circles[0, 0], circles[0, 1]), radius=circles[0, 2], color=(0, 255, 0), thickness=2)
-                cv2.putText(output_frame,'1 laser detected',(50,50),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.6,255)
+                cv2.putText(output_frame,'1 laser detected',(15,25),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,255)
 
                 X_axis = reject_outliers(np.array(X_axis))
                 Y_axis = reject_outliers(np.array(Y_axis))
