@@ -1,6 +1,6 @@
-from kivymd.app import MDApp
-from kivymd.uix.button import MDRaisedButton
+from kivy.app import App
 from kivy.uix.image import Image
+from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.graphics.texture import *
 import imutils
@@ -25,13 +25,13 @@ cap = cv2.VideoCapture(0)
 
 X_axis ,Y_axis= [],[]
 
-class MainApp(MDApp):
+class MainApp(App):
     def build(self):
 
         layout = BoxLayout(orientation='vertical')
         self.image = Image()
 
-        self.closeButton = MDRaisedButton(
+        self.closeButton = Button(
             text='Close App',
             pos_hint = {'center_x': 0.5,'center_y':0.5},
             size_hint = (None,None),
@@ -49,7 +49,7 @@ class MainApp(MDApp):
         return layout
     
     def close_app(self):
-        MDApp.stop()
+        App.stop()
         exit()
 
     def load_video(self,*args):
